@@ -57,13 +57,13 @@ ALTGR_FLAG = 0x80
 """ no altgr flag for the first combined key """
 NO_ALTGR_FLAG = 0x00
 
-COMMON_HEADER_COPYRIGHT = """# SPDX-FileCopyrightText: 2021 Neradoc NeraOnGit@ri1.fr
-#
+COMMON_HEADER_COPYRIGHT = """# SPDX-FileCopyrightText: 2022 Neradoc NeraOnGit@ri1.fr
 # SPDX-License-Identifier: MIT
 \"\"\"
 This file was automatically generated using Circuitpython_Keyboard_Layouts
 \"\"\"
-
+"""
+COMMON_HEADER_VERSION = """
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
@@ -470,7 +470,8 @@ def make_layout_file(layout_data):
     """make the layout file contents"""
     output_file_data = (
         COMMON_HEADER_COPYRIGHT
-        + "from keyboard_layout import KeyboardLayoutBase\n"
+        + "from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase\n"
+        + COMMON_HEADER_VERSION
         + f"class KeyboardLayout(KeyboardLayoutBase):\n"
         "    ASCII_TO_KEYCODE = (\n"
     )
@@ -498,14 +499,20 @@ def make_layout_file(layout_data):
         "    HIGHER_ASCII = {\n"
     )
     for k, c in layout_data.high.items():
-        output_file_data += f"        {repr(k)}: 0x{c:02x},\n"
+        output_file_data += (
+            f"        0x{ord(k):02x}:"
+            f" 0x{c:02x},"
+            f"  # {repr(k)}"
+            "\n"
+        )
     output_file_data += "    }\n" "    COMBINED_KEYS = {\n"
     for k, c in layout_data.combined.items():
         first, second, altgr = c
         second = ord(second) | altgr
         output_file_data += (
-            f"        {repr(k)}: "
-            f'b"\\x{first:02x}\\x{second:02x}",'
+            f"        0x{ord(k):02x}:"
+            f' 0x{first:02x}{second:02x},'
+            f"  # {repr(k)}"
             "\n"
         )
     output_file_data += "    }\n"
@@ -520,7 +527,7 @@ def output_layout_file(output_file, output_file_data):
 
 def make_keycode_file(layout_data):
     """make the keycode file contents"""
-    output_file_data = COMMON_HEADER_COPYRIGHT + "class Keycode:\n"
+    output_file_data = COMMON_HEADER_COPYRIGHT + COMMON_HEADER_VERSION + "class Keycode:\n"
 
     def ck(x):
         l = x[0]

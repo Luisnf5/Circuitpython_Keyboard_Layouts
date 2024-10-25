@@ -3,7 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+ob_start();
 $ERRORS = [];
+define("LAYOUT_BASE", false);
 
 $source_url = "";
 $platform = "win";
@@ -50,19 +52,28 @@ if( preg_match(",^https://kbdlayout.info/kbd([a-zA-Z0-9_-]+)$,", $source_url, $m
 
 	$data = file_get_contents($fileurl);
 	if( strlen($data) > 1000000 ) {
-		die("source URL file too big");
+		$ERRORS[] = "Source URL file too big.";
+	} else {
+		file_put_contents($filepath_xml, $data);
 	}
-	file_put_contents($filepath_xml, $data);
 
 } else {
+	$ERRORS[] = "The source could not be interpreted, or is not supported, check the spelling.";
+}
+
+if(count($ERRORS) > 0) {
 	# other platforms or sources
 	header("HTTP/1.1 500 Internal Server Error");
-	print("<pre>The source could not be interpreted, or is not supported, check the spelling.\n".htmlentities($source_url)."</pre>");
+	print("<pre>");
+	print(join("\n", $ERRORS));
+	print(htmlentities($source_url));
+	print("</pre>");
+	ob_end_flush();
 	exit(0);
 }
 
 $layout_out = array();
-$layout_command = "python3 -m generator --keyboard ".$filepath_xml." --show layout";
+$layout_command = "python3 -m generator --keyboard ".$filepath_xml." --show layout -d0 2>&1";
 exec($layout_command, $layout_out, $result_code);
 $layout = join("\n", $layout_out);
 if($result_code != 0) { $ERRORS[] = "Error Layout\n"; }
@@ -70,7 +81,7 @@ if($result_code != 0) { $ERRORS[] = "Error Layout\n"; }
 $layout = preg_replace("/".preg_quote($VERSION0)."/", $VERSION, $layout);
 
 $keycodes_out = array();
-$keycodes_command = "python3 -m generator --keyboard ".$filepath_xml." --show keycode";
+$keycodes_command = "python3 -m generator --keyboard ".$filepath_xml." --show keycode -d0 2>&1";
 exec($keycodes_command, $keycodes_out, $result_code);
 $keycodes = join("\n", $keycodes_out);
 if($result_code != 0) { $ERRORS[] = "Error Keycodes\n"; }
@@ -80,13 +91,19 @@ if($result_code != 0) { $ERRORS[] = "Error Keycodes\n"; }
 
 $keycodes = preg_replace("/".preg_quote($VERSION0)."/", $VERSION, $keycodes);
 
-if( !file_exists("src/keyboard_layout6.mpy") ) {
-	exec("mpy-cross/mpy-cross.static-amd64-linux-6 src/keyboard_layout.py");
-	rename("src/keyboard_layout.mpy", "src/keyboard_layout6.mpy");
-}
-if( !file_exists("src/keyboard_layout7.mpy") ) {
-	exec("mpy-cross/mpy-cross.static-amd64-linux-7 src/keyboard_layout.py");
-	rename("src/keyboard_layout.mpy", "src/keyboard_layout7.mpy");
+if(LAYOUT_BASE) {
+	if( !file_exists("src/keyboard_layout6.mpy") ) {
+		exec("mpy-cross/mpy-cross.static-amd64-linux-6 src/keyboard_layout.py");
+		rename("src/keyboard_layout.mpy", "src/keyboard_layout6.mpy");
+	}
+	if( !file_exists("src/keyboard_layout7.mpy") ) {
+		exec("mpy-cross/mpy-cross.static-amd64-linux-7 src/keyboard_layout.py");
+		rename("src/keyboard_layout.mpy", "src/keyboard_layout7.mpy");
+	}
+	if( !file_exists("src/keyboard_layout8.mpy") ) {
+		exec("mpy-cross/mpy-cross.static-amd64-linux-8 src/keyboard_layout.py");
+		rename("src/keyboard_layout.mpy", "src/keyboard_layout8.mpy");
+	}
 }
 
 function make_zip($layout, $keycodes, $cpversion, $platform, $lang) {
@@ -97,6 +114,8 @@ function make_zip($layout, $keycodes, $cpversion, $platform, $lang) {
 		$filepath_zip = "data/layout_files_".$platform."_".$lang."-6mpy.zip";
 	} elseif( $cpversion == "7" ) {
 		$filepath_zip = "data/layout_files_".$platform."_".$lang."-7mpy.zip";
+	} elseif( $cpversion == "8" ) {
+		$filepath_zip = "data/layout_files_".$platform."_".$lang."-8mpy.zip";
 	} else {
 		$filepath_zip = "data/layout_files_".$platform."_".$lang."-py.zip";
 	}
@@ -112,7 +131,7 @@ function make_zip($layout, $keycodes, $cpversion, $platform, $lang) {
 		$layout_file = "keyboard_layout_" . $platform . "_" . $lang . ".py";
 		$keycodes_file = "keycode_" . $platform . "_" . $lang . ".py";
 		
-		if( $cpversion == "6" || $cpversion == "7" ) {
+		if( $cpversion == "6" || $cpversion == "7" || $cpversion == "8" ) {
 			# layout
 			$layout_name = preg_replace("/\.py$/", ".mpy", $layout_file);
 			$tempfile = "data/" . uniqid() . "_" . $layout_file;
@@ -132,11 +151,15 @@ function make_zip($layout, $keycodes, $cpversion, $platform, $lang) {
 			$deletes[] = $tempfile;
 			$deletes[] = $mpyfile;
 			# layout base
-			$zip->addFile("src/keyboard_layout".$cpversion.".mpy", "keyboard_layout.mpy");
+			if(LAYOUT_BASE) {
+				$zip->addFile("src/keyboard_layout".$cpversion.".mpy", "keyboard_layout.mpy");
+			}
 		} else {
 			$zip->addFromString($layout_file, $layout);
 			$zip->addFromString($keycodes_file, $keycodes);
-			$zip->addFile("src/keyboard_layout.py", "keyboard_layout.py");
+			if(LAYOUT_BASE) {
+				$zip->addFile("src/keyboard_layout.py", "keyboard_layout.py");
+			}
 		}
 
 		$data = file_get_contents("src/sample_code_template.py");
@@ -183,7 +206,12 @@ if( count($ERRORS) > 0 ) {
 	print(htmlentities($source_url)."\n");
 	print(htmlentities($filepath_xml)."\n");
 	print(join("\n", $ERRORS));
+	if($debug) {
+		print_r($layout_out);
+		print_r($keycodes_out);
+	}
 	print("\n</pre>");
+	ob_end_flush();
 } else {
 	make_zip($layout, $keycodes, $cpversion, $platform, $lang);
 }

@@ -10,7 +10,7 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
-from keyboard_layout import KeyboardLayoutBase
+from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 class KeyboardLayout(KeyboardLayoutBase):
     ASCII_TO_KEYCODE = (
         b'\x00'
@@ -144,54 +144,54 @@ class KeyboardLayout(KeyboardLayoutBase):
     )
     NEED_ALTGR = '@[\\]{|}~²³µ€'
     HIGHER_ASCII = {
-        '²': 0x1f,
-        '§': 0xa0,
-        '³': 0x20,
-        'ß': 0x2d,
-        '€': 0x08,
-        'ü': 0x2f,
-        'Ü': 0xaf,
-        'ö': 0x33,
-        'Ö': 0xb3,
-        'ä': 0x34,
-        'Ä': 0xb4,
-        '°': 0xb5,
-        'µ': 0x10,
+        0xb2: 0x1f,  # '²'
+        0xa7: 0xa0,  # '§'
+        0xb3: 0x20,  # '³'
+        0xdf: 0x2d,  # 'ß'
+        0x20ac: 0x08,  # '€'
+        0xfc: 0x2f,  # 'ü'
+        0xdc: 0xaf,  # 'Ü'
+        0xf6: 0x33,  # 'ö'
+        0xd6: 0xb3,  # 'Ö'
+        0xe4: 0x34,  # 'ä'
+        0xc4: 0xb4,  # 'Ä'
+        0xb0: 0xb5,  # '°'
+        0xb5: 0x10,  # 'µ'
     }
     COMBINED_KEYS = {
-        'á': b"\x2e\x61",
-        'é': b"\x2e\x65",
-        'í': b"\x2e\x69",
-        'ó': b"\x2e\x6f",
-        'ú': b"\x2e\x75",
-        'ý': b"\x2e\x79",
-        'Á': b"\x2e\x41",
-        'É': b"\x2e\x45",
-        'Í': b"\x2e\x49",
-        'Ó': b"\x2e\x4f",
-        'Ú': b"\x2e\x55",
-        'Ý': b"\x2e\x59",
-        '´': b"\x2e\x20",
-        'à': b"\xae\x61",
-        'è': b"\xae\x65",
-        'ì': b"\xae\x69",
-        'ò': b"\xae\x6f",
-        'ù': b"\xae\x75",
-        'À': b"\xae\x41",
-        'È': b"\xae\x45",
-        'Ì': b"\xae\x49",
-        'Ò': b"\xae\x4f",
-        'Ù': b"\xae\x55",
-        '`': b"\xae\x20",
-        'â': b"\x35\x61",
-        'ê': b"\x35\x65",
-        'î': b"\x35\x69",
-        'ô': b"\x35\x6f",
-        'û': b"\x35\x75",
-        'Â': b"\x35\x41",
-        'Ê': b"\x35\x45",
-        'Î': b"\x35\x49",
-        'Ô': b"\x35\x4f",
-        'Û': b"\x35\x55",
-        '^': b"\x35\x20",
+        0xe1: 0x2e61,  # 'á'
+        0xe9: 0x2e65,  # 'é'
+        0xed: 0x2e69,  # 'í'
+        0xf3: 0x2e6f,  # 'ó'
+        0xfa: 0x2e75,  # 'ú'
+        0xfd: 0x2e79,  # 'ý'
+        0xc1: 0x2e41,  # 'Á'
+        0xc9: 0x2e45,  # 'É'
+        0xcd: 0x2e49,  # 'Í'
+        0xd3: 0x2e4f,  # 'Ó'
+        0xda: 0x2e55,  # 'Ú'
+        0xdd: 0x2e59,  # 'Ý'
+        0xb4: 0x2e20,  # '´'
+        0xe0: 0xae61,  # 'à'
+        0xe8: 0xae65,  # 'è'
+        0xec: 0xae69,  # 'ì'
+        0xf2: 0xae6f,  # 'ò'
+        0xf9: 0xae75,  # 'ù'
+        0xc0: 0xae41,  # 'À'
+        0xc8: 0xae45,  # 'È'
+        0xcc: 0xae49,  # 'Ì'
+        0xd2: 0xae4f,  # 'Ò'
+        0xd9: 0xae55,  # 'Ù'
+        0x60: 0xae20,  # '`'
+        0xe2: 0x3561,  # 'â'
+        0xea: 0x3565,  # 'ê'
+        0xee: 0x3569,  # 'î'
+        0xf4: 0x356f,  # 'ô'
+        0xfb: 0x3575,  # 'û'
+        0xc2: 0x3541,  # 'Â'
+        0xca: 0x3545,  # 'Ê'
+        0xce: 0x3549,  # 'Î'
+        0xd4: 0x354f,  # 'Ô'
+        0xdb: 0x3555,  # 'Û'
+        0x5e: 0x3520,  # '^'
     }

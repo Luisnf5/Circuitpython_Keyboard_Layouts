@@ -3,18 +3,22 @@
 # SPDX-License-Identifier: MIT
 
 """
+`keyboard_layout.KeyboardLayoutBase`
+=======================================================
+
 * Author(s): Dan Halbert, AngainorDev, Neradoc
 """
 
 
-__version__ = "1.0.0-auto.0"
+__version__ = "3.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
 class KeyboardLayoutBase:
-    """Map ASCII characters to appropriate keypresses on a standard US PC keyboard.
+    """Base class for keyboard layouts. Uses the tables defined in the subclass
+    to map UTF-8 characters to appropriate keypresses.
 
-    Non-ASCII characters and most control characters will raise an exception.
+    Non-supported characters and most control characters will raise an exception.
     """
 
     # We use the top bit of each byte (0x80) to indicate
@@ -32,18 +36,22 @@ class KeyboardLayoutBase:
         """Specify the layout for the given keyboard.
 
         :param keyboard: a Keyboard object. Write characters to this keyboard when requested.
+
+        Example::
+
+            kbd = Keyboard(usb_hid.devices)
+            layout = KeyboardLayout(kbd)
         """
         self.keyboard = keyboard
 
-    def _write(self, char, keycode, altgr=False):
-        if keycode == 0:
-            raise ValueError(
-                "No keycode available for character {letter} ({num}/0x{num:02x}).".format(
-                    letter=repr(char), num=ord(char)
-                )
-            )
+    def _write(self, keycode, altgr=False):
+        """Type a key combination based on shift bit and altgr bool
+
+        :param keycode: int value of the keycode, with the shift bit.
+        :param altgr: bool indicating if the altgr key should be pressed too.
+        """
+        # Add altgr modifier if needed
         if altgr:
-            # Add altgr modifier
             self.keyboard.press(self.RIGHT_ALT_CODE)
         # If this is a shifted char, clear the SHIFT flag and press the SHIFT key.
         if keycode & self.SHIFT_FLAG:
@@ -56,22 +64,29 @@ class KeyboardLayoutBase:
         """Type the string by pressing and releasing keys on my keyboard.
 
         :param string: A string of ASCII characters.
-        :raises ValueError: if any of the characters are not ASCII or have no keycode
+        :raises ValueError: if any of the characters has no keycode
             (such as some control characters).
+
+        Example::
+
+            # Write abc followed by Enter to the keyboard
+            layout.write('abc\\n')
         """
         for char in string:
             # find easy ones first
             keycode = self._char_to_keycode(char)
             if keycode > 0:
-                self._write(char, keycode, char in self.NEED_ALTGR)
+                self._write(keycode, char in self.NEED_ALTGR)
             # find combined keys
-            elif char in self.COMBINED_KEYS:
-                cchar = self.COMBINED_KEYS[char]
-                self._write(char, cchar[0], cchar[1] & self.ALTGR_FLAG)
-                char = chr(cchar[1] & (~self.ALTGR_FLAG))
+            elif ord(char) in self.COMBINED_KEYS:
+                # first key (including shift bit)
+                cchar = self.COMBINED_KEYS[ord(char)]
+                self._write(cchar >> 8, cchar & self.ALTGR_FLAG)
+                # second key (removing the altgr bit)
+                char = chr(cchar & 0xFF & (~self.ALTGR_FLAG))
                 keycode = self._char_to_keycode(char)
                 # assume no altgr needed for second key
-                self._write(char, keycode, False)
+                self._write(keycode, False)
             else:
                 raise ValueError(
                     "No keycode available for character {letter} ({num}/0x{num:02x}).".format(
@@ -82,14 +97,29 @@ class KeyboardLayoutBase:
     def keycodes(self, char):
         """Return a tuple of keycodes needed to type the given character.
 
-        :param char: A single ASCII character in a string.
+        :param char: A single UTF8 character in a string.
         :type char: str of length one.
         :returns: tuple of Keycode keycodes.
-        :raises ValueError: if ``char`` is not ASCII or there is no keycode for it.
+        :raises ValueError: if there is no keycode for ``char``.
+
+        Examples::
+
+            # Returns (Keycode.TAB,)
+            keycodes('\t')
+            # Returns (Keycode.A,)
+            keycode('a')
+            # Returns (Keycode.SHIFT, Keycode.A)
+            keycode('A')
+            # Raises ValueError with a US layout because it's an unknown character
+            keycode('é')
         """
         keycode = self._char_to_keycode(char)
         if keycode == 0:
-            return []
+            raise ValueError(
+                "No keycode available for character {letter} ({num}/0x{num:02x}).".format(
+                    letter=repr(char), num=ord(char)
+                )
+            )
 
         codes = []
         if char in self.NEED_ALTGR:
@@ -104,16 +134,15 @@ class KeyboardLayoutBase:
     def _above128char_to_keycode(self, char):
         """Return keycode for above 128 ascii codes.
 
-        Since the values are sparse, this may be more space efficient than bloating the table above
-        or adding a dict.
+        A character can be indexed by the char itself or its int ord() value.
 
         :param char_val: ascii char value
         :return: keycode, with modifiers if needed
         """
-        if char in self.HIGHER_ASCII:
-            return self.HIGHER_ASCII[char]
         if ord(char) in self.HIGHER_ASCII:
             return self.HIGHER_ASCII[ord(char)]
+        if char in self.HIGHER_ASCII:
+            return self.HIGHER_ASCII[char]
         return 0
 
     def _char_to_keycode(self, char):

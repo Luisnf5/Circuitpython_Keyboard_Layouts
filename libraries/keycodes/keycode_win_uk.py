@@ -1,12 +1,11 @@
-# SPDX-FileCopyrightText: 2021 Neradoc NeraOnGit@ri1.fr
-#
+# SPDX-FileCopyrightText: 2022 Neradoc NeraOnGit@ri1.fr
 # SPDX-License-Identifier: MIT
 """
 This file was automatically generated using Circuitpython_Keyboard_Layouts
 """
 
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.1-alpha.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
@@ -35,8 +34,8 @@ class Keycode:
     V = 0x19
     W = 0x1a
     X = 0x1b
-    Y = 0x1d
-    Z = 0x1c
+    Y = 0x1c
+    Z = 0x1d
     ALT = 0xe2
     END = 0x4d
     F1 = 0x3a
@@ -68,7 +67,6 @@ class Keycode:
     SIX = 0x23
     TAB = 0x2b
     TWO = 0x1f
-    AKUT = 0x2e
     FIVE = 0x22
     FOUR = 0x21
     HOME = 0x4a
@@ -78,27 +76,26 @@ class Keycode:
     COMMA = 0x36
     EIGHT = 0x25
     ENTER = 0x28
-    MINUS = 0x38
+    MINUS = 0x2d
+    OEM_8 = 0x35
     PAUSE = 0x48
-    QUOTE = 0x34
+    QUOTE = 0x31
     SEVEN = 0x24
     SHIFT = 0xe1
     SPACE = 0x2c
     THREE = 0x20
     APPLICATION = 0x65
-    BACKSLASH = 0x2d
+    BACKSLASH = 0x64
     BACKSPACE = 0x2a
     CAPS_LOCK = 0x39
     COMMAND = 0xe3
     CONTROL = 0xe0
     DELETE = 0x4c
     DOWN_ARROW = 0x51
-    EQUALS = 0x30
+    EQUALS = 0x2e
     ESCAPE = 0x29
-    ESZETT = 0x2d
-    FORWARD_SLASH = 0x31
-    GRAVE_ACCENT = 0x33
-    GRAVIS = 0x2e
+    FORWARD_SLASH = 0x38
+    GRAVE_ACCENT = 0x34
     INSERT = 0x49
     KEYPAD_ASTERISK = 0x55
     KEYPAD_EIGHT = 0x60
@@ -118,10 +115,10 @@ class Keycode:
     KEYPAD_ZERO = 0x62
     LEFT_ALT = 0xe2
     LEFT_ARROW = 0x50
+    LEFT_BRACKET = 0x2f
     LEFT_CONTROL = 0xe0
     LEFT_GUI = 0xe3
     LEFT_SHIFT = 0xe1
-    OEM_102 = 0x64
     OPTION = 0xe2
     PAGE_DOWN = 0x4e
     PAGE_UP = 0x4b
@@ -130,16 +127,15 @@ class Keycode:
     RETURN = 0x28
     RIGHT_ALT = 0xe6
     RIGHT_ARROW = 0x4f
-    RIGHT_BRACKET = 0x2e
+    RIGHT_BRACKET = 0x30
     RIGHT_CONTROL = 0xe4
     RIGHT_GUI = 0xe7
     RIGHT_SHIFT = 0xe5
     SCROLL_LOCK = 0x47
-    SEMICOLON = 0x2f
+    SEMICOLON = 0x33
     SPACEBAR = 0x2c
     UP_ARROW = 0x52
     WINDOWS = 0xe3
-    ZIRKUMFLEX = 0x35
 
     @classmethod
     def modifier_bit(cls, keycode):
@@ -148,4 +144,3 @@ class Keycode:
         return (
             1 << (keycode - 0xE0) if cls.LEFT_CONTROL <= keycode <= cls.RIGHT_GUI else 0
         )
-    

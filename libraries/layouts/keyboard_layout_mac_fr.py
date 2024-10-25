@@ -25,10 +25,10 @@
 * Author(s): Dan Halbert, Neradoc
 """
 
-from keyboard_layout import KeyboardLayoutBase
+from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 
 
-__version__ = "0.0.0-auto.0"
+__version__ = "1.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
@@ -148,9 +148,9 @@ class KeyboardLayout(KeyboardLayoutBase):
         b'\xa2'    # [
         b'\xb7'       # bslash
         b'\xad'    # ]
-        b'\x2F'       # ^
+        b'\x00'       # ^
         b'\xaE'       # _
-        b'\x31'    # `
+        b'\x00'    # `
         b'\x14'       # a
         b'\x05'       # b
         b'\x06'       # c
@@ -178,22 +178,62 @@ class KeyboardLayout(KeyboardLayoutBase):
         b'\x1c'       # y
         b'\x1a'       # z
         b'\x22'    # {
-        b'\x1f'    # |
+        b'\x8f'    # |
         b'\x2d'    # }
-        b'\x11'    # ~ TODO
+        b'\x00'    # ~
         b'\x00'       # DEL
     )
 
     NEED_ALTGR = "[]\\{}|~€"
     HIGHER_ASCII = {
-        "à": 0x27,  # à
-        "ç": 0x26,  # ç
-        "è": 0x24,  # è
-        "é": 0x1F,  # é
-        "ù": 0x34,  # ù
-        "€": 0x30,  # € - altgr will be added thanks to NEED_ALTGR
-        "°": 0xAD,  # °
-        "§": 0x23,  # §
-        #  TODO: add missing ÀÈÉÙ
+        0xe0: 0x27,  # à
+        0xe7: 0x26,  # ç
+        0xe8: 0x24,  # è
+        0xe9: 0x1f,  # é
+        0xf9: 0x34,  # ù
+        0x20ac: 0x30,  # €
+        0xb0: 0xad,  # °
+        0xa7: 0x23,  # §
+        0xa3: 0xb1,  # £
+    }
+    COMBINED_KEYS = {
+        0xe3: 0x11e1,  # ã
+        0xc3: 0x11c1,  # Ã
+        0xf1: 0x11ee,  # ñ
+        0xd1: 0x11ce,  # Ñ
+        0xf5: 0x11ef,  # õ
+        0xd5: 0x11cf,  # Õ
+        0x7e: 0x11a0,  # ~
+        0xd9: 0x3155,  # Ù
+        0x60: 0x3120,  # `
+        0xec: 0x3169,  # ì
+        0xcc: 0x3149,  # Ì
+        0xf2: 0x316f,  # ò
+        0xd2: 0x314f,  # Ò
+        0xc0: 0x3141,  # À
+        0xc8: 0x3145,  # È
+        0xe2: 0x2f61,  # â
+        0xea: 0x2f65,  # ê
+        0xee: 0x2f69,  # î
+        0xf4: 0x2f6f,  # ô
+        0xfb: 0x2f75,  # û
+        0xc2: 0x2f41,  # Â
+        0xca: 0x2f45,  # Ê
+        0xce: 0x2f49,  # Î
+        0xd4: 0x2f4f,  # Ô
+        0xdb: 0x2f55,  # Û
+        0x5e: 0x2f20,  # ^
+        0xe4: 0xaf61,  # ä
+        0xeb: 0xaf65,  # ë
+        0xef: 0xaf69,  # ï
+        0xf6: 0xaf6f,  # ö
+        0xfc: 0xaf75,  # ü
+        0xff: 0xaf79,  # ÿ
+        0xc4: 0xaf41,  # Ä
+        0xcb: 0xaf45,  # Ë
+        0xcf: 0xaf49,  # Ï
+        0xd6: 0xaf4f,  # Ö
+        0xdc: 0xaf55,  # Ü
+        0xa8: 0xaf20,  # ¨
     }
 

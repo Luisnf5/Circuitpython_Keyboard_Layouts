@@ -10,7 +10,7 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
-from keyboard_layout import KeyboardLayoutBase
+from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 class KeyboardLayout(KeyboardLayoutBase):
     ASCII_TO_KEYCODE = (
         b'\x00'
@@ -144,83 +144,83 @@ class KeyboardLayout(KeyboardLayoutBase):
     )
     NEED_ALTGR = '!#$%&()*-;<>@[\\]^`¤ß€'
     HIGHER_ASCII = {
-        'ě': 0x1f,
-        'š': 0x20,
-        'č': 0x21,
-        'ř': 0x22,
-        'ž': 0x23,
-        'ý': 0x24,
-        'á': 0x25,
-        'í': 0x26,
-        'é': 0x27,
-        '€': 0x08,
-        'ú': 0x2f,
-        'ů': 0x33,
-        '§': 0x34,
-        '¤': 0x34,
-        'ß': 0x64,
+        0x11b: 0x1f,  # 'ě'
+        0x161: 0x20,  # 'š'
+        0x10d: 0x21,  # 'č'
+        0x159: 0x22,  # 'ř'
+        0x17e: 0x23,  # 'ž'
+        0xfd: 0x24,  # 'ý'
+        0xe1: 0x25,  # 'á'
+        0xed: 0x26,  # 'í'
+        0xe9: 0x27,  # 'é'
+        0x20ac: 0x08,  # '€'
+        0xfa: 0x2f,  # 'ú'
+        0x16f: 0x33,  # 'ů'
+        0xa7: 0x34,  # '§'
+        0xa4: 0x34,  # '¤'
+        0xdf: 0x64,  # 'ß'
     }
     COMBINED_KEYS = {
-        'á': b"\x2e\x61",
-        'Á': b"\x2e\x41",
-        'ś': b"\x2e\x73",
-        'Ś': b"\x2e\x53",
-        'ć': b"\x2e\x63",
-        'Ć': b"\x2e\x43",
-        'é': b"\x2e\x65",
-        'É': b"\x2e\x45",
-        'ŕ': b"\x2e\x72",
-        'Ŕ': b"\x2e\x52",
-        'í': b"\x2e\x69",
-        'Í': b"\x2e\x49",
-        'ó': b"\x2e\x6f",
-        'Ó': b"\x2e\x4f",
-        'ú': b"\x2e\x75",
-        'Ú': b"\x2e\x55",
-        'ý': b"\x2e\x79",
-        'Ý': b"\x2e\x59",
-        'ĺ': b"\x2e\x6c",
-        'Ĺ': b"\x2e\x4c",
-        'ń': b"\x2e\x6e",
-        'Ń': b"\x2e\x4e",
-        'ź': b"\x2e\x7a",
-        'Ź': b"\x2e\x5a",
-        '´': b"\x2e\x20",
-        'č': b"\xae\x63",
-        'Č': b"\xae\x43",
-        'ď': b"\xae\x64",
-        'Ď': b"\xae\x44",
-        'ě': b"\xae\x65",
-        'Ě': b"\xae\x45",
-        'ř': b"\xae\x72",
-        'Ř': b"\xae\x52",
-        'ľ': b"\xae\x6c",
-        'Ľ': b"\xae\x4c",
-        'ň': b"\xae\x6e",
-        'Ň': b"\xae\x4e",
-        'š': b"\xae\x73",
-        'Š': b"\xae\x53",
-        'ť': b"\xae\x74",
-        'Ť': b"\xae\x54",
-        'ž': b"\xae\x7a",
-        'Ž': b"\xae\x5a",
-        'ˇ': b"\xae\x20",
-        'å': b"\xb5\x61",
-        'Å': b"\xb5\x41",
-        'ů': b"\xb5\x75",
-        'Ů': b"\xb5\x55",
-        '°': b"\xb5\x20",
-        'ä': b"\x31\x61",
-        'Ä': b"\x31\x41",
-        'ë': b"\x31\x65",
-        'Ë': b"\x31\x45",
-        'ï': b"\x31\x69",
-        'Ï': b"\x31\x49",
-        'ö': b"\x31\x6f",
-        'Ö': b"\x31\x4f",
-        'ü': b"\x31\x75",
-        'Ü': b"\x31\x55",
-        'ÿ': b"\x31\x79",
-        'Ÿ': b"\x31\x59",
-        '¨': b"\x31\x20",
+        0xe1: 0x2e61,  # 'á'
+        0xc1: 0x2e41,  # 'Á'
+        0x15b: 0x2e73,  # 'ś'
+        0x15a: 0x2e53,  # 'Ś'
+        0x107: 0x2e63,  # 'ć'
+        0x106: 0x2e43,  # 'Ć'
+        0xe9: 0x2e65,  # 'é'
+        0xc9: 0x2e45,  # 'É'
+        0x155: 0x2e72,  # 'ŕ'
+        0x154: 0x2e52,  # 'Ŕ'
+        0xed: 0x2e69,  # 'í'
+        0xcd: 0x2e49,  # 'Í'
+        0xf3: 0x2e6f,  # 'ó'
+        0xd3: 0x2e4f,  # 'Ó'
+        0xfa: 0x2e75,  # 'ú'
+        0xda: 0x2e55,  # 'Ú'
+        0xfd: 0x2e79,  # 'ý'
+        0xdd: 0x2e59,  # 'Ý'
+        0x13a: 0x2e6c,  # 'ĺ'
+        0x139: 0x2e4c,  # 'Ĺ'
+        0x144: 0x2e6e,  # 'ń'
+        0x143: 0x2e4e,  # 'Ń'
+        0x17a: 0x2e7a,  # 'ź'
+        0x179: 0x2e5a,  # 'Ź'
+        0xb4: 0x2e20,  # '´'
+        0x10d: 0xae63,  # 'č'
+        0x10c: 0xae43,  # 'Č'
+        0x10f: 0xae64,  # 'ď'
+        0x10e: 0xae44,  # 'Ď'
+        0x11b: 0xae65,  # 'ě'
+        0x11a: 0xae45,  # 'Ě'
+        0x159: 0xae72,  # 'ř'
+        0x158: 0xae52,  # 'Ř'
+        0x13e: 0xae6c,  # 'ľ'
+        0x13d: 0xae4c,  # 'Ľ'
+        0x148: 0xae6e,  # 'ň'
+        0x147: 0xae4e,  # 'Ň'
+        0x161: 0xae73,  # 'š'
+        0x160: 0xae53,  # 'Š'
+        0x165: 0xae74,  # 'ť'
+        0x164: 0xae54,  # 'Ť'
+        0x17e: 0xae7a,  # 'ž'
+        0x17d: 0xae5a,  # 'Ž'
+        0x2c7: 0xae20,  # 'ˇ'
+        0xe5: 0xb561,  # 'å'
+        0xc5: 0xb541,  # 'Å'
+        0x16f: 0xb575,  # 'ů'
+        0x16e: 0xb555,  # 'Ů'
+        0xb0: 0xb520,  # '°'
+        0xe4: 0x3161,  # 'ä'
+        0xc4: 0x3141,  # 'Ä'
+        0xeb: 0x3165,  # 'ë'
+        0xcb: 0x3145,  # 'Ë'
+        0xef: 0x3169,  # 'ï'
+        0xcf: 0x3149,  # 'Ï'
+        0xf6: 0x316f,  # 'ö'
+        0xd6: 0x314f,  # 'Ö'
+        0xfc: 0x3175,  # 'ü'
+        0xdc: 0x3155,  # 'Ü'
+        0xff: 0x3179,  # 'ÿ'
+        0x178: 0x3159,  # 'Ÿ'
+        0xa8: 0x3120,  # '¨'
     }

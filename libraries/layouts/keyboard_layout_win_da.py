@@ -10,7 +10,7 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Neradoc/Circuitpython_Keyboard_Layouts.git"
 
 
-from keyboard_layout import KeyboardLayoutBase
+from adafruit_hid.keyboard_layout_base import KeyboardLayoutBase
 class KeyboardLayout(KeyboardLayoutBase):
     ASCII_TO_KEYCODE = (
         b'\x00'
@@ -144,72 +144,72 @@ class KeyboardLayout(KeyboardLayoutBase):
     )
     NEED_ALTGR = '$@[\\]{|}£µ€'
     HIGHER_ASCII = {
-        '£': 0x20,
-        '¤': 0xa1,
-        '€': 0x22,
-        'å': 0x2f,
-        'Å': 0xaf,
-        'æ': 0x33,
-        'Æ': 0xb3,
-        'ø': 0x34,
-        'Ø': 0xb4,
-        '½': 0x35,
-        '§': 0xb5,
-        'µ': 0x10,
+        0xa3: 0x20,  # '£'
+        0xa4: 0xa1,  # '¤'
+        0x20ac: 0x22,  # '€'
+        0xe5: 0x2f,  # 'å'
+        0xc5: 0xaf,  # 'Å'
+        0xe6: 0x33,  # 'æ'
+        0xc6: 0xb3,  # 'Æ'
+        0xf8: 0x34,  # 'ø'
+        0xd8: 0xb4,  # 'Ø'
+        0xbd: 0x35,  # '½'
+        0xa7: 0xb5,  # '§'
+        0xb5: 0x10,  # 'µ'
     }
     COMBINED_KEYS = {
-        'á': b"\x2e\x61",
-        'é': b"\x2e\x65",
-        'í': b"\x2e\x69",
-        'ó': b"\x2e\x6f",
-        'ú': b"\x2e\x75",
-        'ý': b"\x2e\x79",
-        'Á': b"\x2e\x41",
-        'É': b"\x2e\x45",
-        'Í': b"\x2e\x49",
-        'Ó': b"\x2e\x4f",
-        'Ú': b"\x2e\x55",
-        'Ý': b"\x2e\x59",
-        '´': b"\x2e\x20",
-        'à': b"\xae\x61",
-        'è': b"\xae\x65",
-        'ì': b"\xae\x69",
-        'ò': b"\xae\x6f",
-        'ù': b"\xae\x75",
-        'À': b"\xae\x41",
-        'È': b"\xae\x45",
-        'Ì': b"\xae\x49",
-        'Ò': b"\xae\x4f",
-        'Ù': b"\xae\x55",
-        '`': b"\xae\x20",
-        'ä': b"\x30\x61",
-        'ë': b"\x30\x65",
-        'ï': b"\x30\x69",
-        'ö': b"\x30\x6f",
-        'ü': b"\x30\x75",
-        'ÿ': b"\x30\x79",
-        'Ä': b"\x30\x41",
-        'Ë': b"\x30\x45",
-        'Ï': b"\x30\x49",
-        'Ö': b"\x30\x4f",
-        'Ü': b"\x30\x55",
-        '¨': b"\x30\x20",
-        'â': b"\xb0\x61",
-        'ê': b"\xb0\x65",
-        'î': b"\xb0\x69",
-        'ô': b"\xb0\x6f",
-        'û': b"\xb0\x75",
-        'Â': b"\xb0\x41",
-        'Ê': b"\xb0\x45",
-        'Î': b"\xb0\x49",
-        'Ô': b"\xb0\x4f",
-        'Û': b"\xb0\x55",
-        '^': b"\xb0\x20",
-        'ã': b"\x30\xe1",
-        'õ': b"\x30\xef",
-        'ñ': b"\x30\xee",
-        'Ã': b"\x30\xc1",
-        'Õ': b"\x30\xcf",
-        'Ñ': b"\x30\xce",
-        '~': b"\x30\xa0",
+        0xe1: 0x2e61,  # 'á'
+        0xe9: 0x2e65,  # 'é'
+        0xed: 0x2e69,  # 'í'
+        0xf3: 0x2e6f,  # 'ó'
+        0xfa: 0x2e75,  # 'ú'
+        0xfd: 0x2e79,  # 'ý'
+        0xc1: 0x2e41,  # 'Á'
+        0xc9: 0x2e45,  # 'É'
+        0xcd: 0x2e49,  # 'Í'
+        0xd3: 0x2e4f,  # 'Ó'
+        0xda: 0x2e55,  # 'Ú'
+        0xdd: 0x2e59,  # 'Ý'
+        0xb4: 0x2e20,  # '´'
+        0xe0: 0xae61,  # 'à'
+        0xe8: 0xae65,  # 'è'
+        0xec: 0xae69,  # 'ì'
+        0xf2: 0xae6f,  # 'ò'
+        0xf9: 0xae75,  # 'ù'
+        0xc0: 0xae41,  # 'À'
+        0xc8: 0xae45,  # 'È'
+        0xcc: 0xae49,  # 'Ì'
+        0xd2: 0xae4f,  # 'Ò'
+        0xd9: 0xae55,  # 'Ù'
+        0x60: 0xae20,  # '`'
+        0xe4: 0x3061,  # 'ä'
+        0xeb: 0x3065,  # 'ë'
+        0xef: 0x3069,  # 'ï'
+        0xf6: 0x306f,  # 'ö'
+        0xfc: 0x3075,  # 'ü'
+        0xff: 0x3079,  # 'ÿ'
+        0xc4: 0x3041,  # 'Ä'
+        0xcb: 0x3045,  # 'Ë'
+        0xcf: 0x3049,  # 'Ï'
+        0xd6: 0x304f,  # 'Ö'
+        0xdc: 0x3055,  # 'Ü'
+        0xa8: 0x3020,  # '¨'
+        0xe2: 0xb061,  # 'â'
+        0xea: 0xb065,  # 'ê'
+        0xee: 0xb069,  # 'î'
+        0xf4: 0xb06f,  # 'ô'
+        0xfb: 0xb075,  # 'û'
+        0xc2: 0xb041,  # 'Â'
+        0xca: 0xb045,  # 'Ê'
+        0xce: 0xb049,  # 'Î'
+        0xd4: 0xb04f,  # 'Ô'
+        0xdb: 0xb055,  # 'Û'
+        0x5e: 0xb020,  # '^'
+        0xe3: 0x30e1,  # 'ã'
+        0xf5: 0x30ef,  # 'õ'
+        0xf1: 0x30ee,  # 'ñ'
+        0xc3: 0x30c1,  # 'Ã'
+        0xd5: 0x30cf,  # 'Õ'
+        0xd1: 0x30ce,  # 'Ñ'
+        0x7e: 0x30a0,  # '~'
     }
